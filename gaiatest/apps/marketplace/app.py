@@ -15,9 +15,11 @@ class Marketplace(Base):
     _loading_fragment_locator = ('css selector', 'div.loading-fragment')
     _error_title_locator = ('css selector', '#appError-appframe1 h3[data-l10n-id="error-title"]')
     _error_message_locator = ('css selector', '#appError-appframe1 span[data-l10n-id="error-message"]')
+    _settings_button_locator = ('css selector', 'a.header-button.settings')
 
     # Marketplace search on home page
     _search_locator = ('id', 'search-q')
+    _signed_in_notification_locator = ('id', 'notification')
 
     def switch_to_marketplace_frame(self):
         """Only Marketplace production has a frame for the app."""
@@ -43,3 +45,17 @@ class Marketplace(Base):
         search_box.send_keys(Keys.RETURN)
         from gaiatest.apps.marketplace.regions.search_results import SearchResults
         return SearchResults(self.marionette)
+
+    def tap_settings(self):
+        self.marionette.tap(self.marionette.find_element(*self._settings_button_locator))
+        from gaiatest.apps.marketplace.regions.settings import Settings
+        return Settings(self.marionette)
+
+    def wait_for_setting_displayed(self):
+        self.wait_for_element_displayed(*self._settings_button_locator)
+
+    def wait_for_signed_in_notification(self):
+        self.wait_for_element_displayed(*self._signed_in_notification_locator)
+
+    def tap_signed_in_notification(self):
+        self.marionette.tap(self.marionette.find_element(*self._signed_in_notification_locator))
