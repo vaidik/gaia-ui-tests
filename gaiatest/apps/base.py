@@ -9,6 +9,7 @@ from marionette.errors import ElementNotVisibleException
 from marionette.errors import TimeoutException
 
 from gaiatest import GaiaApps
+from gaiatest import Keyboard
 
 
 class Base(object):
@@ -18,6 +19,7 @@ class Base(object):
     def __init__(self, marionette):
         self.marionette = marionette
         self.apps = GaiaApps(self.marionette)
+        self.keyboard = Keyboard(self.marionette, self)
 
     def launch(self):
         self.app = self.apps.launch(self.name)

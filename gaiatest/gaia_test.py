@@ -423,6 +423,33 @@ class GaiaTestCase(MarionetteTestCase):
         # reset to home screen
         self.marionette.execute_script("window.wrappedJSObject.dispatchEvent(new Event('home'));")
 
+    def install_marketplace(self):
+        _yes_button_locator = ('id', 'app-install-install-button')
+        mk = {"name": "Marketplace Dev",
+              "manifest": "https://marketplace-dev.allizom.org/manifest.webapp ",
+              "settings": {
+                  "dom.payment.skipHTTPSCheck": True,
+                  "dom.identity.enabled": True,
+                  "toolkit.identity.debug": True,
+                  "dom.payment.provider.1.name": "firefoxmarketdev",
+                  "dom.payment.provider.1.description": "marketplace-dev.allizom.org",
+                  "dom.payment.provider.1.uri": "https://marketplace-dev.allizom.org/mozpay/?req=",
+                  "dom.payment.provider.1.type": "mozilla-dev/payments/pay/v1",
+                  "dom.payment.provider.1.requestMethod": "GET"},
+              }
+
+        if not self.apps.is_app_installed(mk['name']):
+            # install the marketplace dev app
+            self.marionette.execute_script('navigator.mozApps.install("%s")' % mk['manifest'])
+
+            # TODO add this to the system app object when we have one
+            self.wait_for_element_displayed(*_yes_button_locator)
+            self.marionette.tap(self.marionette.find_element(*_yes_button_locator))
+            self.wait_for_element_not_displayed(*_yes_button_locator)
+
+            # push payment settings
+            [self.data_layer.set_setting(name, value) for name, value in mk['settings'].items()]
+
     def connect_to_network(self):
         # TODO determine if we are online already
         # TODO only enable cell data if lan failed
@@ -567,6 +594,7 @@ class GaiaTestCase(MarionetteTestCase):
         self.apps = None
         self.data_layer = None
         MarionetteTestCase.tearDown(self)
+
 
 class Keyboard(object):
     _language_key = '-3'

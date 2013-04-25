@@ -21,7 +21,7 @@ class TestMarketplaceLogin(GaiaTestCase):
     def test_login_marketplace(self):
         # https://moztrap.mozilla.org/manage/case/4134/
 
-        # self.wait_for_element_displayed(*self._settings_button_locator)
+        self.marketplace.wait_for_setting_displayed()
         settings = self.marketplace.tap_settings()
         persona = settings.tap_sign_in()
 
@@ -32,8 +32,8 @@ class TestMarketplaceLogin(GaiaTestCase):
         self.marketplace.launch()
         self.marketplace.switch_to_marketplace_frame()
 
-        self.marketplace.wait_for_signed_in_notification()
-        self.marketplace.tap_signed_in_notification()
+        # self.marketplace.wait_for_signed_in_notification()
+        # self.marketplace.tap_signed_in_notification()
 
         settings.wait_for_sign_out_button()
 

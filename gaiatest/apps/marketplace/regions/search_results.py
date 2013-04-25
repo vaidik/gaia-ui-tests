@@ -52,6 +52,11 @@ class SearchResults(Base):
         def price(self):
             return self.root_element.find_element(*self._price_locator).text
 
+        def tap_price(self):
+            self.marionette.tap(self.marionette.find_element(*self._price_locator))
+            from gaiatest.apps.persona.app import Persona
+            return Persona(self.marionette)
+
 
 class FilterResults(Base):
 

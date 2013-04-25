@@ -19,7 +19,7 @@ class Marketplace(Base):
 
     # Marketplace search on home page
     _search_locator = ('id', 'search-q')
-    _signed_in_notification_locator = ('id', 'notification')
+    _signed_in_notification_locator = ('css selector', '#notification.show')
 
     def __init__(self, marionette, app_name=False):
         Base.__init__(self, marionette)
@@ -43,6 +43,7 @@ class Marketplace(Base):
         return self.marionette.find_element(*self._error_message_locator).text
 
     def search(self, term):
+        self.wait_for_element_displayed(*self._search_locator)
         search_box = self.marionette.find_element(*self._search_locator)
 
         # search for the app

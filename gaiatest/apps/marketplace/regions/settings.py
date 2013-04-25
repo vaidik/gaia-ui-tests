@@ -12,10 +12,16 @@ class Settings(Base):
     _save_locator = ('css selector', '.form-footer.c > button')
     _sign_in_button_locator = ('css selector', 'a.button.browserid')
     _sign_out_button_locator = ('css selector', 'a.button.logout')
+    _back_button_locator = ('id', 'nav-back')
 
     def __init__(self, marionette):
         Base.__init__(self, marionette)
         self.wait_for_element_displayed(*self._save_locator)
+
+    def tap_back(self):
+        self.marionette.tap(self.marionette.find_element(*self._back_button_locator))
+        from gaiatest.apps.marketplace.app import Marketplace
+        return Marketplace(self.marionette)
 
     def wait_for_sign_in_displayed(self):
         self.wait_for_element_displayed(*self._sign_in_button_locator)
