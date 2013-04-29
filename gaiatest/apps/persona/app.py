@@ -18,6 +18,9 @@ class Persona(Base):
         self.wait_for_element_present(*self._tui_container_locator)
 
     def payments(self, pin, phone_number, network):
+        from gaiatest.apps.keyboard.app import Keyboard
+        keyboard = Keyboard(self.marionette)
+
         payments = Payments(self.marionette)
         payments.switch_to_payments_frame()
 
@@ -28,7 +31,7 @@ class Persona(Base):
         # create pin workflow
         # tap and enter the pin for the first time
         payments.tap_first_pin_number()
-        self.keyboard.send(pin)
+        keyboard.send(pin)
 
         # switch back to app
         payments.switch_to_payments_frame()
@@ -37,7 +40,7 @@ class Persona(Base):
         # enter the pin code for the second time
         payments.wait_for_reverify_pin_displayed()
         payments.tap_first_pin_number()
-        self.keyboard.send(pin)
+        keyboard.send(pin)
 
         # switch back to app
         payments.switch_to_payments_frame()
