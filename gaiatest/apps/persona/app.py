@@ -80,3 +80,7 @@ class Persona(Base):
                 login.type_create_password(password)
                 login.type_confirm_password(password)
                 login.tap_verify_user()
+            else:
+                raise Exception
+        else:
+            raise Exception
