@@ -48,7 +48,7 @@ class Persona(Base):
 
         # add the phone number and network information
         payments.mobile_number(phone_number)
-        payments.mobile_network_select(network)
+        payments.select_mobile_network(network)
 
         # TO BE CONTINUED
 
@@ -66,25 +66,14 @@ class Persona(Base):
         # this is necessary because we can't have a clean profile every time we log in
         if login.form_section_id == 'authentication_form':
             login.wait_for_email_input()
-            login.email(email)
+            login.type_email(email)
             login.tap_next()
-
-            # if we login with a unverified user we have to confirm the password
+            # if we login with an unverified user we have to confirm the password
             if login.form_section_id == "authentication_form":
                 login.wait_for_password_input()
-                login.password(password)
+                login.type_password(password)
                 login.tap_returning()
             elif login.form_section_id == "set_password":
-                login.create_password(password)
-                login.confirm_password(password)
+                login.type_create_password(password)
+                login.type_confirm_password(password)
                 login.tap_verify_user()
-
-            # login.tap_sign_in()
-            # # Sometimes it prompts for "Remember Me?"
-            # # If it does, tell it to remember you for this session only
-            # # TODO: Find out actual logic behind when it prompts or not
-            # try:
-            #     self.wait_for_element_displayed(*self._this_session_only_button_locator)
-            #     login.tap_this_session_only()
-            # except:
-            #     pass

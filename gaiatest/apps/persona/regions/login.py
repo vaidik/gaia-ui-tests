@@ -23,7 +23,7 @@ class Login(Base):
     _confirm_password_locator = ('id', 'vpassword')
     _verify_user_locator = ('id', 'verify_user')
 
-    _form_section_locator = ('css selector', 'div.form_section')
+    _form_section_locator = ('css selector', 'div.vertical div.form_section')
 
     def switch_to_persona_frame(self):
         self.wait_for_element_present(*self._persona_frame_locator)
@@ -32,19 +32,19 @@ class Login(Base):
 
         self.wait_for_element_not_present(*self._waiting_locator)
 
-    def email(self, value):
+    def type_email(self, value):
         email_field = self.marionette.find_element(*self._email_input_locator)
         email_field.send_keys(value)
 
-    def password(self, value):
+    def type_password(self, value):
         password_field = self.marionette.find_element(*self._password_input_locator)
         password_field.send_keys(value)
 
-    def create_password(self, value):
+    def type_create_password(self, value):
         password_field = self.marionette.find_element(*self._create_password_locator)
         password_field.send_keys(value)
 
-    def confirm_password(self, value):
+    def type_confirm_password(self, value):
         password_field = self.marionette.find_element(*self._confirm_password_locator)
         password_field.send_keys(value)
 
@@ -53,6 +53,7 @@ class Login(Base):
         # TODO:  Remove workaround after bug 845849
         self.marionette.execute_script("arguments[0].scrollIntoView(false);", [next_button])
         self.marionette.tap(next_button)
+        self.wait_for_element_not_displayed(*self._next_button_locator)
 
     def tap_verify_user(self):
         self.marionette.tap(self.marionette.find_element(*self._verify_user_locator))

@@ -33,10 +33,6 @@ class TestMarketplacePayments(GaiaTestCase):
         self.marionette.switch_to_frame()
         marketplace.launch()
 
-        # tap to dismiss the notification
-        marketplace.wait_for_signed_in_notification()
-        marketplace.tap_signed_in_notification()
-
         # wait for the page to refresh and the sign out button to be visible
         settings.wait_for_sign_out_button()
 
@@ -48,4 +44,4 @@ class TestMarketplacePayments(GaiaTestCase):
         persona = search.search_results[0].tap_price()
 
         # pay app
-        payments = persona.payments(pin='1234', phone_number='+40746064453', network='---')
+        payments = persona.payments(pin='1234', phone_number=self.testvars['this_phone_number'], network='---')

@@ -32,9 +32,6 @@ class TestMarketplaceLogin(GaiaTestCase):
         self.marketplace.launch()
         self.marketplace.switch_to_marketplace_frame()
 
-        # self.marketplace.wait_for_signed_in_notification()
-        # self.marketplace.tap_signed_in_notification()
-
         settings.wait_for_sign_out_button()
 
         # Verify that user is logged in

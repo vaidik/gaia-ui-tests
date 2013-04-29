@@ -45,7 +45,7 @@ class Payments(Base):
         mobile_number = self.marionette.find_element(*self._mobile_number_locator)
         mobile_number.send_keys(value)
 
-    def mobile_network_select(self, value):
+    def select_mobile_network(self, value):
         mobile_network = self.marionette.find_element(*self._mobile_network_select_locator)
         mobile_network.click()
         self.select(value)
