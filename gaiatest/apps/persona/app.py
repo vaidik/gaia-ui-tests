@@ -66,21 +66,18 @@ class Persona(Base):
             login.wait_for_sign_in_button()
             login.tap_this_is_not_me()
 
-        # this is necessary because we can't have a clean profile every time we log in
-        if login.form_section_id == 'authentication_form':
-            login.wait_for_email_input()
-            login.type_email(email)
-            login.tap_next()
-            # if we login with an unverified user we have to confirm the password
-            if login.form_section_id == "authentication_form":
-                login.wait_for_password_input()
-                login.type_password(password)
-                login.tap_returning()
-            elif login.form_section_id == "set_password":
-                login.type_create_password(password)
-                login.type_confirm_password(password)
-                login.tap_verify_user()
-            else:
-                raise Exception
+        login.wait_for_email_input()
+        login.type_email(email)
+        login.tap_next()
+
+        # if we login with an unverified user we have to confirm the password
+        if login.form_section_id == "authentication_form":
+            login.wait_for_password_input()
+            login.type_password(password)
+            login.tap_returning()
+        elif login.form_section_id == "set_password":
+            login.type_create_password(password)
+            login.type_confirm_password(password)
+            login.tap_verify_user()
         else:
-            raise Exception
+            raise Exception('Could not log into Persona')

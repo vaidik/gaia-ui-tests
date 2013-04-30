@@ -2,6 +2,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+import time
 from gaiatest.apps.base import Base
 
 
@@ -31,6 +32,9 @@ class Login(Base):
         self.marionette.switch_to_frame(persona_iframe)
 
         self.wait_for_element_not_present(*self._waiting_locator)
+        # TODO: because of issue: https://github.com/mozilla/browserid/issues/3318 we can't wait for the right element
+        time.sleep(5)
+
 
     def type_email(self, value):
         email_field = self.marionette.find_element(*self._email_input_locator)
