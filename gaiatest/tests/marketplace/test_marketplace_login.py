@@ -8,15 +8,23 @@ from gaiatest.apps.marketplace.app import Marketplace
 
 class TestMarketplaceLogin(GaiaTestCase):
 
+    MARKETPLACE_DEV_NAME = 'Marketplace Dev'
+
+    # Marketplace locators
+    _settings_button_locator = ('css selector', 'a.header-button.settings')
+    _sign_in_button_locator = ('css selector', 'a.button.browserid')
+    _signed_in_notification_locator = ('id', 'notification')
+    _sign_out_button_locator = ('css selector', 'a.button.logout')
+
+    _email_account_field_locator = ('id', 'email')
+
     def setUp(self):
         GaiaTestCase.setUp(self)
         self.connect_to_network()
+        self.install_marketplace()
 
-        self.marketplace = Marketplace(self.marionette)
+        self.marketplace = Marketplace(self.marionette, self.MARKETPLACE_DEV_NAME)
         self.marketplace.launch()
-
-        # Switch to marketplace iframe
-        self.marketplace.switch_to_marketplace_frame()
 
     def test_login_marketplace(self):
         # https://moztrap.mozilla.org/manage/case/4134/
@@ -30,7 +38,10 @@ class TestMarketplaceLogin(GaiaTestCase):
         # switch back to Marketplace
         self.marionette.switch_to_frame()
         self.marketplace.launch()
-        self.marketplace.switch_to_marketplace_frame()
+
+        # tap on the signed-in notification at the bottom of the screen to dismiss it
+        self.wait_for_element_displayed(*self._signed_in_notification_locator)
+        self.marionette.tap(self.marionette.find_element(*self._signed_in_notification_locator))
 
         settings.wait_for_sign_out_button()
 
