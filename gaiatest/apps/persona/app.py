@@ -3,7 +3,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from gaiatest.apps.base import Base
-from gaiatest.apps.persona.regions.payments import Payments
 from gaiatest.apps.persona.regions.login import Login
 
 
@@ -16,44 +15,6 @@ class Persona(Base):
         Base.__init__(self, marionette)
         self.marionette.switch_to_frame()
         self.wait_for_element_present(*self._tui_container_locator)
-
-    def payments(self, pin, phone_number, network):
-        from gaiatest.apps.keyboard.app import Keyboard
-        keyboard = Keyboard(self.marionette)
-
-        payments = Payments(self.marionette)
-        payments.switch_to_payments_frame()
-
-        # wait for the pin code form
-        payments.wait_for_payments_to_begin_not_displayed()
-        payments.wait_for_enter_pin_displayed()
-
-        # create pin workflow
-        # tap and enter the pin for the first time
-        payments.tap_first_pin_number()
-        keyboard.send(pin)
-
-        # switch back to app
-        payments.switch_to_payments_frame()
-        payments.tap_continue()
-
-        # enter the pin code for the second time
-        payments.wait_for_reverify_pin_displayed()
-        payments.tap_first_pin_number()
-        keyboard.send(pin)
-
-        # switch back to app
-        payments.switch_to_payments_frame()
-        payments.tap_continue()
-
-        # wait for the phone number and network form
-        payments.wait_for_mobile_number_displayed
-
-        # add the phone number and network information
-        payments.mobile_number(phone_number)
-        payments.select_mobile_network(network)
-
-        # TO BE CONTINUED
 
     def login(self, email, password):
         login = Login(self.marionette)

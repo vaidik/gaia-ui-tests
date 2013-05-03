@@ -41,7 +41,13 @@ class Payments(Base):
     def tap_continue(self):
         self.marionette.find_element('css selector', '#pin>footer>button').click()
 
-    def mobile_number(self, value):
+    def select_country(self, value):
+        pass
+        # country_select = self.marionette.find_element(*)
+        # country_select.click()
+        # self.select(value)
+
+    def type_mobile_number(self, value):
         mobile_number = self.marionette.find_element(*self._mobile_number_locator)
         mobile_number.send_keys(value)
 
