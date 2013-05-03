@@ -54,8 +54,9 @@ class SearchResults(Base):
 
         def tap_price(self):
             self.marionette.tap(self.marionette.find_element(*self._price_locator))
-            from gaiatest.apps.persona.app import Persona
-            return Persona(self.marionette)
+            if self.price != "Free":
+                from gaiatest.apps.bango.app import Bango
+                return Bango(self.marionette)
 
 
 class FilterResults(Base):

@@ -8,10 +8,10 @@ from gaiatest.apps.base import Base
 
 class Login(Base):
     # iframes
-    _persona_frame_locator = ('css selector', "iframe.screen[data-url*='persona.org']")
+    _persona_frame_locator = ('css selector', "iframe.screen[data-url*='https://login.native-persona.org/sign_in#NATIVE']")
 
     # persona login
-    _waiting_locator = ('css selector', 'body.waiting')
+    _waiting_locator = ('css selector', 'body:not([waiting])')
     _email_input_locator = ('id', 'authentication_email')
     _password_input_locator = ('id', 'authentication_password')
     _next_button_locator = ('css selector', 'button.start')
@@ -27,11 +27,12 @@ class Login(Base):
     _form_section_locator = ('css selector', 'div.vertical div.form_section')
 
     def switch_to_persona_frame(self):
+        self.marionette.switch_to_frame()
         self.wait_for_element_present(*self._persona_frame_locator)
         persona_iframe = self.marionette.find_element(*self._persona_frame_locator)
         self.marionette.switch_to_frame(persona_iframe)
 
-        self.wait_for_element_not_present(*self._waiting_locator)
+        self.wait_for_element_present(*self._waiting_locator)
         # TODO: because of issue: https://github.com/mozilla/browserid/issues/3318 we can't wait for the right element
         time.sleep(5)
 

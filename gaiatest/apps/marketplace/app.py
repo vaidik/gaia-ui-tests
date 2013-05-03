@@ -13,16 +13,9 @@ class Marketplace(Base):
     _marketplace_iframe_locator = ('css selector', 'iframe[src*="marketplace"]')
 
     _loading_fragment_locator = ('css selector', 'div.loading-fragment')
-<<<<<<< HEAD
-    _error_title_locator = ('css selector', '#appError-appframe1 h3[data-l10n-id="error-title"]')
-    _error_message_locator = ('css selector', '#appError-appframe1 span[data-l10n-id="error-message"]')
-    _settings_button_locator = ('css selector', 'a.header-button.settings')
-=======
     _error_title_locator = ('css selector', 'div.modal-dialog-message-container > h3.title')
     _error_message_locator = ('css selector', 'div.modal-dialog-message-container .message')
->>>>>>> upstream/master
-
-    # Marketplace search on home page
+    _settings_button_locator = ('css selector', 'a.header-button.settings')
     _search_locator = ('id', 'search-q')
     _signed_in_notification_locator = ('css selector', '#notification.show')
 

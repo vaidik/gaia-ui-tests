@@ -7,7 +7,7 @@ from gaiatest.apps.marketplace.app import Marketplace
 from gaiatest.mocks.persona_test_user import PersonaTestUser
 
 
-class TestMarketplacePayments(GaiaTestCase):
+class TestMarketplacePurchaseApp(GaiaTestCase):
 
     def setUp(self):
         GaiaTestCase.setUp(self)
@@ -17,7 +17,7 @@ class TestMarketplacePayments(GaiaTestCase):
         # generate unverified PersonaTestUser account
         self.user = PersonaTestUser().create_user()
 
-    def test_marketplace_payments(self):
+    def test_marketplace_purchase_app(self):
 
         marketplace = Marketplace(self.marionette, 'Marketplace dev')
         marketplace.launch()
@@ -35,13 +35,15 @@ class TestMarketplacePayments(GaiaTestCase):
 
         # wait for the page to refresh and the sign out button to be visible
         settings.wait_for_sign_out_button()
+        import time
+        time.sleep(2)
 
         # return to Marketplace homepage
         marketplace = settings.tap_back()
 
         # search for a paid app and tap on the price
         search = marketplace.search('Private Yacht')
-        persona = search.search_results[0].tap_price()
+        bango = search.search_results[0].tap_price()
 
         # pay app
-        payments = persona.payments(pin='1234', phone_number=self.testvars['this_phone_number'], network='---')
+        bango.make_payment(pin='1234', phone_number=self.testvars['this_phone_number'], country="United Kingdom", network='Three')
