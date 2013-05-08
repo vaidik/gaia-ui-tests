@@ -17,7 +17,8 @@ class TestSearchMarketplacePaidApp(GaiaTestCase):
         self.install_marketplace()
 
     def test_search_paid_app(self):
-        marketplace = Marketplace(self.marionette, 'Marketplace dev')
+
+        marketplace = Marketplace(self.marionette, 'Marketplace Dev')
         marketplace.launch()
 
         results = marketplace.search('')
