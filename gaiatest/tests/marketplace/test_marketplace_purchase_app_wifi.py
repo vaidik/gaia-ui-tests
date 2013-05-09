@@ -29,7 +29,7 @@ class TestMarketplacePurchaseApp(GaiaTestCase):
 
     def test_marketplace_purchase_app(self):
 
-        marketplace = Marketplace(self.marionette, 'Marketplace dev')
+        marketplace = Marketplace(self.marionette, 'Marketplace Dev')
         marketplace.launch()
 
         # Tap settings and sign in in Marketplace
@@ -57,7 +57,7 @@ class TestMarketplacePurchaseApp(GaiaTestCase):
         bango = search.search_results[0].tap_price()
 
         # pay app
-        bango.make_payment_lan(pin='1234',
+        bango.make_payment_wifi(pin='1234',
                mobile_phone_number=self.testvars['carrier']['phone_number'],
                country=self.testvars['carrier']['country'],
                network=self.testvars['carrier']['network'],)

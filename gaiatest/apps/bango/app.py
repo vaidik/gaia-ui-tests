@@ -24,6 +24,7 @@ class Bango(Base):
     _mobile_number_locator = ('id', 'msisdn')
     _mobile_network_select_locator = ('id', 'contentHolder_uxContent_uxDdlNetworks')
     _mobile_number_label_locator = ('css selector', '#numberSection label')
+    _country_region_flag_locator = ('id', 'contentHolder_uxContent_uxRegionSelection_uxImgRegionFlag')
     _change_country_link_locator = ('id', 'contentHolder_uxContent_uxRegionSelection_uxRegionChangeLnk')
     _country_select_list_locator = ('id', 'contentHolder_uxContent_uxRegionSelection_uxUlCountries')
     _mobile_section_continue_button_locator = ('id', 'contentHolder_uxContent_uxLnkContinue')
@@ -74,7 +75,7 @@ class Bango(Base):
         self.wait_for_buy_app_section_displayed()
         self.tap_buy_button()
 
-    def make_payment_lan(self, pin, mobile_phone_number, country, network):
+    def make_payment_wifi(self, pin, mobile_phone_number, country, network):
         """
         A helper method to complete all of the payment steps using Wifi or LAN
         """
@@ -94,9 +95,11 @@ class Bango(Base):
         # wait for the phone number and network form
         self.wait_for_confirm_number_section_displayed()
 
-        # Select the country first otherwise it clears the other fields
-        self.tap_change_country()
-        self.select_country(country)
+        # If Bango does not successfully auto-detect the country
+        if self.current_country is not country:
+            # Select the country first otherwise it clears the other fields
+            self.tap_change_country()
+            self.select_country(country)
 
         # Enter the phone number
         self.type_mobile_number(mobile_phone_number)
@@ -157,6 +160,10 @@ class Bango(Base):
 
     def tap_confirm_pin_continue(self):
         self.marionette.find_element(*self._confirm_pin_continue_button_locator).click()
+
+    @property
+    def current_country(self):
+        return self.marionette.find_element(*self._country_region_flag_locator).get_attribute('alt')
 
     def tap_change_country(self):
         self.marionette.tap(self.marionette.find_element(*self._change_country_link_locator))

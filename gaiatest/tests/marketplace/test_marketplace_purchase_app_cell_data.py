@@ -29,7 +29,7 @@ class TestMarketplacePurchaseApp(GaiaTestCase):
 
     def test_marketplace_purchase_app(self):
 
-        marketplace = Marketplace(self.marionette, 'Marketplace dev')
+        marketplace = Marketplace(self.marionette, 'Marketplace Dev')
         marketplace.launch()
 
         # Tap settings and sign in in Marketplace
