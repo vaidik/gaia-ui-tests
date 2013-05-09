@@ -5,8 +5,6 @@
     "country": "",
     "network": ""
   },
-
-  "this_phone_number": "",
   "imei": "",
   "remote_phone_number": "",
   "wifi": {
@@ -15,5 +13,12 @@
   "marketplace": {
     "username": "",
     "password": ""
+  },
+  "email": {
+    "gmail": {
+      "name": "",
+      "email": "",
+      "password": ""
+    }
   }
 }
