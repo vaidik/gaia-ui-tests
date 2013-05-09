@@ -482,15 +482,6 @@ class GaiaTestCase(MarionetteTestCase):
         _yes_button_locator = ('id', 'app-install-install-button')
         mk = {"name": "Marketplace Dev",
               "manifest": "https://marketplace-dev.allizom.org/manifest.webapp ",
-              "settings": {
-                  "dom.payment.skipHTTPSCheck": True,
-                  "dom.identity.enabled": True,
-                  "toolkit.identity.debug": True,
-                  "dom.payment.provider.1.name": "firefoxmarketdev",
-                  "dom.payment.provider.1.description": "marketplace-dev.allizom.org",
-                  "dom.payment.provider.1.uri": "https://marketplace-dev.allizom.org/mozpay/?req=",
-                  "dom.payment.provider.1.type": "mozilla-dev/payments/pay/v1",
-                  "dom.payment.provider.1.requestMethod": "GET"},
               }
 
         if not self.apps.is_app_installed(mk['name']):
@@ -501,9 +492,6 @@ class GaiaTestCase(MarionetteTestCase):
             self.wait_for_element_displayed(*_yes_button_locator)
             self.marionette.tap(self.marionette.find_element(*_yes_button_locator))
             self.wait_for_element_not_displayed(*_yes_button_locator)
-
-            # push payment settings
-            [self.data_layer.set_setting(name, value) for name, value in mk['settings'].items()]
 
     def connect_to_network(self):
         if not self.device.is_online:

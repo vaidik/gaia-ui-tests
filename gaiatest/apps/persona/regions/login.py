@@ -7,8 +7,8 @@ from gaiatest.apps.base import Base
 
 
 class Login(Base):
-    # iframes
-    _persona_frame_locator = ('css selector', "iframe.screen[data-url*='https://login.native-persona.org/sign_in#NATIVE']")
+    # Iframes - there are multiple Persona iframes so be strict with the locator
+    _persona_frame_locator = ('css selector', "iframe.screen[data-url*='https://firefoxos.persona.org/sign_in#NATIVE']")
 
     # persona login
     _waiting_locator = ('css selector', 'body:not([waiting])')
@@ -28,6 +28,7 @@ class Login(Base):
 
     def switch_to_persona_frame(self):
         self.marionette.switch_to_frame()
+
         self.wait_for_element_present(*self._persona_frame_locator)
         persona_iframe = self.marionette.find_element(*self._persona_frame_locator)
         self.marionette.switch_to_frame(persona_iframe)

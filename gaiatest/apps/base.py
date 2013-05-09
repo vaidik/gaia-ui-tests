@@ -10,6 +10,7 @@ from marionette.errors import TimeoutException
 
 from gaiatest import GaiaApps
 
+
 class Base(object):
     # deafult timeout in seconds for the wait_for methods
     _default_timeout = 30
