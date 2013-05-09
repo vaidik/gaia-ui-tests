@@ -2,6 +2,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+import time
 import re
 from gaiatest.apps.base import Base
 from gaiatest.apps.keyboard.app import Keyboard
@@ -22,6 +23,7 @@ class Bango(Base):
     _number_section_locator = ('id', 'numberSection')
     _mobile_number_locator = ('id', 'msisdn')
     _mobile_network_select_locator = ('id', 'contentHolder_uxContent_uxDdlNetworks')
+    _mobile_number_label_locator = ('css selector', '#numberSection label')
     _change_country_link_locator = ('id', 'contentHolder_uxContent_uxRegionSelection_uxRegionChangeLnk')
     _country_select_list_locator = ('id', 'contentHolder_uxContent_uxRegionSelection_uxUlCountries')
     _mobile_section_continue_button_locator = ('id', 'contentHolder_uxContent_uxLnkContinue')
@@ -33,6 +35,12 @@ class Bango(Base):
 
     # Final buy app panel
     _buy_button_locator = ('id', 'uxBtnBuyNow')
+
+    # System locators SMS toaster
+    _notification_toaster_locator = ('id', 'notification-toaster')
+    # System locator Select wrapper
+    _select_locator = ("xpath", "//section[@id='value-selector-container']//li[label[span[text()='%s']]]")
+    _close_button_locator = ('css selector', 'button.value-option-confirm')
 
 
     def __init__(self, marionette):
@@ -47,9 +55,9 @@ class Bango(Base):
         self.marionette.switch_to_frame(payment_iframe)
 
     def make_payment_cell_data(self, pin):
-        '''
+        """
         A helper method to complete all of the payment steps using Cell data
-        '''
+        """
 
         # create pin workflow
         self.wait_for_enter_pin_section_displayed()
@@ -67,9 +75,9 @@ class Bango(Base):
         self.tap_buy_button()
 
     def make_payment_lan(self, pin, mobile_phone_number, country, network):
-        '''
+        """
         A helper method to complete all of the payment steps using Wifi or LAN
-        '''
+        """
 
         # create pin workflow
         self.wait_for_enter_pin_section_displayed()
@@ -100,8 +108,7 @@ class Bango(Base):
 
         # Switch to System frame and wait for the SMS to arrive.
         self.marionette.switch_to_frame()
-        _notification_toaster_locator = ('id', 'notification-toaster')
-        notification_toaster = self.marionette.find_element(*_notification_toaster_locator)
+        notification_toaster = self.marionette.find_element(*self._notification_toaster_locator)
 
         # TODO Re-enable this when Bug 861874
         # self.wait_for_element_displayed(*self._notification_toaster_locator)
@@ -163,14 +170,15 @@ class Bango(Base):
     def type_mobile_number(self, value):
         mobile_number_input = self.marionette.find_element(*self._mobile_number_locator)
         mobile_number_input.send_keys(value)
+        # It just seems to need this to be safe
+        time.sleep(1)
 
         # Hit a dummy element to trigger Bango's focus js
-        self.marionette.find_element('css selector', '#numberSection label').click()
+        self.marionette.tap(self.marionette.find_element(*self._mobile_number_label_locator))
 
     def select_mobile_network(self, network):
-        # There are System level locators not bango
-        select_locator = ("xpath", "//section[@id='value-selector-container']//li[label[span[text()='%s']]]" % network)
-        close_button_locator = ('css selector', 'button.value-option-confirm')
+        # Compile the locator with string
+        select_locator = (self._select_locator[0], self._select_locator[1] % network)
 
         mobile_network = self.marionette.find_element(*self._mobile_network_select_locator)
         mobile_network.click()
@@ -181,7 +189,7 @@ class Bango(Base):
         element = self.marionette.find_element(*select_locator)
         element.click()
 
-        close_button = self.marionette.find_element(*close_button_locator)
+        close_button = self.marionette.find_element(*self._close_button_locator)
         self.marionette.tap(close_button)
 
         self.switch_to_bango_frame()
@@ -201,6 +209,8 @@ class Bango(Base):
         self.marionette.find_element(*self._confirm_sms_pin_button_locator).click()
 
     def tap_buy_button(self):
+        # It just seems to need this to be safe
+        time.sleep(1)
         self.marionette.tap(self.marionette.find_element(*self._buy_button_locator))
         self.marionette.switch_to_frame()
         self.wait_for_element_not_present(*self._payment_frame_locator)

@@ -1,5 +1,11 @@
 {
   "settings": {},
+  "carrier":{
+    "phone_number": "",
+    "country": "",
+    "network": ""
+  },
+
   "this_phone_number": "",
   "imei": "",
   "remote_phone_number": "",

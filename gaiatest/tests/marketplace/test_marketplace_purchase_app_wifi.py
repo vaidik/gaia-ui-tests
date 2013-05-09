@@ -21,7 +21,7 @@ class TestMarketplacePurchaseApp(GaiaTestCase):
         if self.apps.is_app_installed(self._APP_NAME):
             self.apps.uninstall(self._APP_NAME)
 
-        self.data_layer.connect_to_cell_data()
+        self.data_layer.connect_to_wifi()
         self.install_marketplace()
 
         # generate unverified PersonaTestUser account
@@ -57,7 +57,10 @@ class TestMarketplacePurchaseApp(GaiaTestCase):
         bango = search.search_results[0].tap_price()
 
         # pay app
-        bango.make_payment_cell_data(pin='1234')
+        bango.make_payment_lan(pin='1234',
+               mobile_phone_number=self.testvars['carrier']['phone_number'],
+               country=self.testvars['carrier']['country'],
+               network=self.testvars['carrier']['network'],)
 
         # At gaia System level, complete the installation prompt
         self._confirm_installation()
@@ -76,3 +79,7 @@ class TestMarketplacePurchaseApp(GaiaTestCase):
         self.wait_for_element_displayed(*_yes_button_locator)
         self.marionette.tap(self.marionette.find_element(*_yes_button_locator))
         self.wait_for_element_not_displayed(*_yes_button_locator)
+
+    def tearDown(self):
+
+        GaiaTestCase.tearDown(self)
