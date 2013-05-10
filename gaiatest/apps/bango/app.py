@@ -21,9 +21,9 @@ class Bango(Base):
 
     # Enter mobile network/number/country locators
     _number_section_locator = ('id', 'numberSection')
+    _number_section_label_locator = ('css selector', '#numberSection label')
     _mobile_number_locator = ('id', 'msisdn')
     _mobile_network_select_locator = ('id', 'contentHolder_uxContent_uxDdlNetworks')
-    _mobile_number_label_locator = ('css selector', '#numberSection label')
     _country_region_flag_locator = ('id', 'contentHolder_uxContent_uxRegionSelection_uxImgRegionFlag')
     _change_country_link_locator = ('id', 'contentHolder_uxContent_uxRegionSelection_uxRegionChangeLnk')
     _country_select_list_locator = ('id', 'contentHolder_uxContent_uxRegionSelection_uxUlCountries')
@@ -31,6 +31,7 @@ class Bango(Base):
 
     # Pin received from SMS message
     _sms_pin_section_locator = ('id', 'pinSection')
+    _sms_pin_section_label_locator = ('css selector', '#pinSection label')
     _sms_pin_input_locator = ('id', 'pin')
     _confirm_sms_pin_button_locator = ('id', 'contentHolder_uxContent_uxLnkConfirm')
 
@@ -177,11 +178,11 @@ class Bango(Base):
     def type_mobile_number(self, value):
         mobile_number_input = self.marionette.find_element(*self._mobile_number_locator)
         mobile_number_input.send_keys(value)
-        # It just seems to need this to be safe
-        time.sleep(1)
 
         # Hit a dummy element to trigger Bango's focus js
-        self.marionette.tap(self.marionette.find_element(*self._mobile_number_label_locator))
+        self.marionette.find_element(*self._number_section_label_locator).click()
+        # It just seems to need this to be safe
+        time.sleep(1)
 
     def select_mobile_network(self, network):
         # Compile the locator with string
@@ -210,10 +211,13 @@ class Bango(Base):
         pin_input.send_keys(sms_pin_number)
 
         # Hit a dummy element to trigger Bango's focus js
-        self.marionette.find_element(*self._sms_pin_section_locator).click()
+        self.marionette.find_element(*self._sms_pin_section_label_locator).click()
+        time.sleep(2)
 
     def tap_confirm_sms_pin_button(self):
         self.marionette.find_element(*self._confirm_sms_pin_button_locator).click()
+        # It just seems to need this to be safe
+        time.sleep(1)
 
     def tap_buy_button(self):
         # It just seems to need this to be safe

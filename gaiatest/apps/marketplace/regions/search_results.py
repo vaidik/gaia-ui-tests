@@ -9,12 +9,13 @@ from gaiatest.apps.base import PageRegion
 class SearchResults(Base):
 
     _search_results_area_locator = ('id', 'search-results')
+    _search_results_loading_locator = ('css selector', 'div.loading')
     _search_result_locator = ('css selector', '#search-results li.item')
     _filter_button_locator = ('css selector', '#site-header .header-button.filter')
 
     def __init__(self, marionette):
         Base.__init__(self, marionette)
-        self.wait_for_element_displayed(*self._search_results_area_locator)
+        self.wait_for_element_not_present(*self._search_results_loading_locator)
 
     def tap_filter(self):
         self.marionette.tap(self.marionette.find_element(*self._filter_button_locator))
@@ -30,7 +31,7 @@ class SearchResults(Base):
         _name_locator = ('css selector', '.info > h3')
         _author_locator = ('css selector', '.info .author')
         _install_button_locator = ('css selector', '.button.product.install')
-        _price_locator = ('css selector', '.premium.button.product')
+        _price_locator = ('css selector', 'div.price')
 
         @property
         def name(self):
@@ -46,17 +47,16 @@ class SearchResults(Base):
 
         def tap_install_button(self):
             self.marionette.tap(self.root_element.find_element(*self._install_button_locator))
-            self.marionette.switch_to_frame()
+
+            if self.price != "Free":
+                from gaiatest.apps.bango.app import Bango
+                return Bango(self.marionette)
+            else:
+                self.marionette.switch_to_frame()
 
         @property
         def price(self):
             return self.root_element.find_element(*self._price_locator).text
-
-        def tap_price(self):
-            self.marionette.tap(self.marionette.find_element(*self._price_locator))
-            if self.price != "Free":
-                from gaiatest.apps.bango.app import Bango
-                return Bango(self.marionette)
 
 
 class FilterResults(Base):

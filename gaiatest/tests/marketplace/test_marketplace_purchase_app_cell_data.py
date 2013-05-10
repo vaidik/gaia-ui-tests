@@ -8,7 +8,7 @@ from gaiatest.apps.marketplace.app import Marketplace
 from gaiatest.mocks.persona_test_user import PersonaTestUser
 
 
-class TestMarketplacePurchaseApp(GaiaTestCase):
+class TestMarketplacePurchaseAppCellData(GaiaTestCase):
 
     _APP_NAME = 'Private Yacht'
     _app_icon_locator = ('xpath', "//li[@class='icon']//span[text()='%s']" % _APP_NAME)
@@ -27,7 +27,7 @@ class TestMarketplacePurchaseApp(GaiaTestCase):
         # generate unverified PersonaTestUser account
         self.user = PersonaTestUser().create_user()
 
-    def test_marketplace_purchase_app(self):
+    def test_marketplace_purchase_app_cell_data(self):
 
         marketplace = Marketplace(self.marionette, 'Marketplace Dev')
         marketplace.launch()
@@ -49,12 +49,9 @@ class TestMarketplacePurchaseApp(GaiaTestCase):
         # Well I dunno, it just needs this
         time.sleep(3)
 
-        # return to Marketplace homepage
-        marketplace = settings.tap_back()
-
         # search for a paid app and tap on the price
         search = marketplace.search(self._APP_NAME)
-        bango = search.search_results[0].tap_price()
+        bango = search.search_results[0].tap_install_button()
 
         # pay app
         bango.make_payment_cell_data(pin='1234')
