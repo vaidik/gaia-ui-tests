@@ -31,7 +31,7 @@ class SearchResults(Base):
         _name_locator = ('css selector', '.info > h3')
         _author_locator = ('css selector', '.info .author')
         _install_button_locator = ('css selector', '.button.product.install')
-        _price_locator = ('css selector', 'div.price')
+        _price_locator = ('css selector', '.info div.price')
 
         @property
         def name(self):
@@ -56,7 +56,7 @@ class SearchResults(Base):
 
         @property
         def price(self):
-            return self.root_element.find_element(*self._price_locator).text
+            return self.root_element.find_element(*self._install_button_locator).text.strip()
 
 
 class FilterResults(Base):

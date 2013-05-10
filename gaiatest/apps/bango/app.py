@@ -4,6 +4,7 @@
 
 import time
 import re
+from marionette.keys import Keys
 from gaiatest.apps.base import Base
 from gaiatest.apps.keyboard.app import Keyboard
 
@@ -97,7 +98,7 @@ class Bango(Base):
         self.wait_for_confirm_number_section_displayed()
 
         # If Bango does not successfully auto-detect the country
-        if self.current_country is not country:
+        if self.current_country != country:
             # Select the country first otherwise it clears the other fields
             self.tap_change_country()
             self.select_country(country)
@@ -140,18 +141,28 @@ class Bango(Base):
 
     def wait_for_enter_pin_section_displayed(self):
         self.wait_for_element_displayed(*self._enter_pin_section_locator)
+        # Because difficult
+        time.sleep(2)
 
     def wait_for_confirm_pin_section_displayed(self):
         self.wait_for_element_displayed(*self._confirm_pin_section_locator)
+        # Because difficult
+        time.sleep(2)
 
     def wait_for_confirm_number_section_displayed(self):
         self.wait_for_element_displayed(*self._number_section_locator)
+        # Because difficult
+        time.sleep(2)
 
     def wait_for_sms_pin_section_displayed(self):
         self.wait_for_element_displayed(*self._sms_pin_section_locator)
+        # Because difficult
+        time.sleep(2)
 
     def wait_for_buy_app_section_displayed(self):
         self.wait_for_element_displayed(*self._buy_button_locator)
+        # Because difficult
+        time.sleep(2)
 
     def type_pin_number(self, pin):
         self.marionette.find_element(*self._enter_pin_input_locator).click()
@@ -178,10 +189,9 @@ class Bango(Base):
     def type_mobile_number(self, value):
         mobile_number_input = self.marionette.find_element(*self._mobile_number_locator)
         mobile_number_input.send_keys(value)
-
-        # Hit a dummy element to trigger Bango's focus js
+        mobile_number_input.send_keys(Keys.RETURN)
+        time.sleep(1)
         self.marionette.find_element(*self._number_section_label_locator).click()
-        # It just seems to need this to be safe
         time.sleep(1)
 
     def select_mobile_network(self, network):
@@ -209,10 +219,11 @@ class Bango(Base):
         pin_input = self.marionette.find_element(*self._sms_pin_input_locator)
         pin_input.click()
         pin_input.send_keys(sms_pin_number)
+        pin_input.send_keys(Keys.RETURN)
+        time.sleep(1)
 
-        # Hit a dummy element to trigger Bango's focus js
         self.marionette.find_element(*self._sms_pin_section_label_locator).click()
-        time.sleep(2)
+        time.sleep(1)
 
     def tap_confirm_sms_pin_button(self):
         self.marionette.find_element(*self._confirm_sms_pin_button_locator).click()
@@ -220,8 +231,6 @@ class Bango(Base):
         time.sleep(1)
 
     def tap_buy_button(self):
-        # It just seems to need this to be safe
-        time.sleep(1)
-        self.marionette.tap(self.marionette.find_element(*self._buy_button_locator))
+        self.marionette.find_element(*self._buy_button_locator).click()
         self.marionette.switch_to_frame()
         self.wait_for_element_not_present(*self._payment_frame_locator)
