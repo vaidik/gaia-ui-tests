@@ -46,6 +46,8 @@ class SearchResults(Base):
             return self.root_element.find_element(*self._install_button_locator).text
 
         def tap_install_button(self):
+            print self.marionette.page_source
+
             self.marionette.tap(self.root_element.find_element(*self._install_button_locator))
 
             if self.price != "Free":

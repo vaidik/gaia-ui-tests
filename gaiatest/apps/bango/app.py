@@ -51,6 +51,9 @@ class Bango(Base):
         self.keyboard = Keyboard(self.marionette)
         self.switch_to_bango_frame()
 
+    def launch(self):
+        self.switch_to_bango_frame()
+
     def switch_to_bango_frame(self):
         self.marionette.switch_to_frame()
         self.wait_for_element_present(*self._payment_frame_locator)
@@ -196,21 +199,23 @@ class Bango(Base):
 
     def select_mobile_network(self, network):
         # Compile the locator with string
-        select_locator = (self._select_locator[0], self._select_locator[1] % network)
+        # select_locator = (self._select_locator[0], self._select_locator[1] % network)
+        #
+        # mobile_network = self.marionette.find_element(*self._mobile_network_select_locator)
+        # mobile_network.click()
+        # self.marionette.switch_to_frame()
+        #
+        # self.wait_for_element_present(*select_locator)
+        #
+        # element = self.marionette.find_element(*select_locator)
+        # element.click()
+        #
+        # close_button = self.marionette.find_element(*self._close_button_locator)
+        # self.marionette.tap(close_button)
+        #
+        # self.switch_to_bango_frame()
 
-        mobile_network = self.marionette.find_element(*self._mobile_network_select_locator)
-        mobile_network.click()
-        self.marionette.switch_to_frame()
-
-        self.wait_for_element_present(*select_locator)
-
-        element = self.marionette.find_element(*select_locator)
-        element.click()
-
-        close_button = self.marionette.find_element(*self._close_button_locator)
-        self.marionette.tap(close_button)
-
-        self.switch_to_bango_frame()
+        self.select(network)
 
     def tap_mobile_section_continue_button(self):
         self.marionette.find_element(*self._mobile_section_continue_button_locator).click()
