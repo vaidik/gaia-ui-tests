@@ -46,15 +46,17 @@ class SearchResults(Base):
             return self.root_element.find_element(*self._install_button_locator).text
 
         def tap_install_button(self):
-            print self.marionette.page_source
-
             self.marionette.tap(self.root_element.find_element(*self._install_button_locator))
 
-            if self.price != "Free":
-                from gaiatest.apps.bango.app import Bango
-                return Bango(self.marionette)
-            else:
-                self.marionette.switch_to_frame()
+            # Switch back to system app and expect the 'Install' dialog
+            self.marionette.switch_to_frame()
+
+        def tap_purchase_button(self):
+            self.marionette.tap(self.root_element.find_element(*self._install_button_locator))
+
+            # Return Bango payment object
+            from gaiatest.apps.bango.app import Bango
+            return Bango(self.marionette)
 
         @property
         def price(self):

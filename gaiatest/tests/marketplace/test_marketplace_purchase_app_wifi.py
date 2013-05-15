@@ -25,7 +25,8 @@ class TestMarketplacePurchaseAppWifi(GaiaTestCase):
         self.install_marketplace()
 
         # generate unverified PersonaTestUser account
-        self.user = PersonaTestUser().create_user()
+        # TODO switch this back to unverified user account after https://github.com/mozilla/browserid/issues/3409
+        self.user = PersonaTestUser().create_user(verified=True)
 
     def test_marketplace_purchase_app_wifi(self):
 
@@ -51,7 +52,7 @@ class TestMarketplacePurchaseAppWifi(GaiaTestCase):
 
         # search for a paid app and tap on the price
         search = marketplace.search(self._APP_NAME)
-        bango = search.search_results[0].tap_install_button()
+        bango = search.search_results[0].tap_purchase_button()
 
         # pay app
         bango.make_payment_wifi(pin='1234',
@@ -76,7 +77,3 @@ class TestMarketplacePurchaseAppWifi(GaiaTestCase):
         self.wait_for_element_displayed(*_yes_button_locator)
         self.marionette.tap(self.marionette.find_element(*_yes_button_locator))
         self.wait_for_element_not_displayed(*_yes_button_locator)
-
-    def tearDown(self):
-
-        GaiaTestCase.tearDown(self)
