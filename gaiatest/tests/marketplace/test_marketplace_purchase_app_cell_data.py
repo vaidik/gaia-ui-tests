@@ -26,7 +26,9 @@ class TestMarketplacePurchaseAppCellData(GaiaTestCase):
 
         # generate unverified PersonaTestUser account
         # TODO switch this back to unverified user account after https://github.com/mozilla/browserid/issues/3409
-        self.user = PersonaTestUser().create_user(verified=True)
+        self.user = PersonaTestUser().create_user(verified=True, env={
+            "browserid": "firefoxos.persona.org",
+            "verifier": "marketplace-dev.allizom.org"})
 
     def test_marketplace_purchase_app_cell_data(self):
 
