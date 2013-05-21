@@ -13,12 +13,15 @@ class Bango(Base):
 
     _payment_frame_locator = ('css selector', "div#trustedui-frame-container > iframe")
 
+    # id_pin is the 4 digit security code to secure your identity
+    # sms_pin is the PIN received in SMS to validate the network connection
+
     # Enter/confirm PIN
-    _enter_pin_locator = ('id', 'enter-pin')
-    _enter_pin_input_locator = ('css selector', 'div.pinbox span.current')
-    _enter_pin_section_locator = ('css selector', 'form[action="/mozpay/pin/create"]')
-    _confirm_pin_section_locator = ('css selector', 'form[action="/mozpay/pin/confirm"]')
-    _confirm_pin_continue_button_locator = ('css selector', '#pin > footer > button')
+    _enter_id_pin_locator = ('id', 'enter-pin')
+    _enter_id_pin_input_locator = ('css selector', 'div.pinbox span')
+    _enter_id_pin_section_locator = ('css selector', 'form[action="/mozpay/pin/create"]')
+    _confirm_id_pin_section_locator = ('css selector', 'form[action="/mozpay/pin/confirm"]')
+    _confirm_id_pin_continue_button_locator = ('css selector', '#pin > footer > button')
 
     # Enter mobile network/number/country locators
     _number_section_locator = ('id', 'numberSection')
@@ -66,16 +69,16 @@ class Bango(Base):
         """
 
         # create pin workflow
-        self.wait_for_enter_pin_section_displayed()
+        self.wait_for_enter_id_pin_section_displayed()
 
         # tap and enter the pin for the first time
-        self.type_pin_number(pin)
-        self.tap_confirm_pin_continue()
-        self.wait_for_confirm_pin_section_displayed()
+        self.type_id_pin_number(pin)
+        self.tap_confirm_id_pin_continue()
+        self.wait_for_confirm_id_pin_section_displayed()
 
         # enter the pin code for the second time
-        self.type_pin_number(pin)
-        self.tap_confirm_pin_continue()
+        self.type_id_pin_number(pin)
+        self.tap_confirm_id_pin_continue()
 
         self.wait_for_buy_app_section_displayed()
         self.tap_buy_button()
@@ -86,16 +89,16 @@ class Bango(Base):
         """
 
         # create pin workflow
-        self.wait_for_enter_pin_section_displayed()
+        self.wait_for_enter_id_pin_section_displayed()
 
         # tap and enter the pin for the first time
-        self.type_pin_number(pin)
-        self.tap_confirm_pin_continue()
-        self.wait_for_confirm_pin_section_displayed()
+        self.type_id_pin_number(pin)
+        self.tap_confirm_id_pin_continue()
+        self.wait_for_confirm_id_pin_section_displayed()
 
         # enter the pin code for the second time
-        self.type_pin_number(pin)
-        self.tap_confirm_pin_continue()
+        self.type_id_pin_number(pin)
+        self.tap_confirm_id_pin_continue()
 
         # wait for the phone number and network form
         self.wait_for_confirm_number_section_displayed()
@@ -142,39 +145,39 @@ class Bango(Base):
         self.tap_buy_button()
 
 
-    def wait_for_enter_pin_section_displayed(self):
-        self.wait_for_element_displayed(*self._enter_pin_section_locator)
+    def wait_for_enter_id_pin_section_displayed(self):
+        self.wait_for_element_displayed(*self._enter_id_pin_section_locator)
         # Because difficult
-        time.sleep(2)
+        #time.sleep(2)
 
-    def wait_for_confirm_pin_section_displayed(self):
-        self.wait_for_element_displayed(*self._confirm_pin_section_locator)
+    def wait_for_confirm_id_pin_section_displayed(self):
+        self.wait_for_element_displayed(*self._confirm_id_pin_section_locator)
         # Because difficult
-        time.sleep(2)
+       # time.sleep(2)
 
     def wait_for_confirm_number_section_displayed(self):
         self.wait_for_element_displayed(*self._number_section_locator)
         # Because difficult
-        time.sleep(2)
+        #time.sleep(2)
 
     def wait_for_sms_pin_section_displayed(self):
         self.wait_for_element_displayed(*self._sms_pin_section_locator)
         # Because difficult
-        time.sleep(2)
+        #time.sleep(2)
 
     def wait_for_buy_app_section_displayed(self):
         self.wait_for_element_displayed(*self._buy_button_locator)
         # Because difficult
-        time.sleep(2)
+       # time.sleep(2)
 
-    def type_pin_number(self, pin):
-        self.marionette.find_element(*self._enter_pin_input_locator).click()
+    def type_id_pin_number(self, pin):
+        self.marionette.find_element(*self._enter_id_pin_input_locator).click()
         self.keyboard.send(pin)
         # Switch back to Bango frame
         self.switch_to_bango_frame()
 
-    def tap_confirm_pin_continue(self):
-        self.marionette.find_element(*self._confirm_pin_continue_button_locator).click()
+    def tap_confirm_id_pin_continue(self):
+        self.marionette.find_element(*self._confirm_id_pin_continue_button_locator).click()
 
     @property
     def current_country(self):
@@ -223,8 +226,8 @@ class Bango(Base):
         pin_input.click()
         pin_input.send_keys(sms_pin_number)
         pin_input.send_keys(Keys.RETURN)
-        time.sleep(1)
 
+        time.sleep(1)
         self.marionette.find_element(*self._sms_pin_section_label_locator).click()
         time.sleep(1)
 
