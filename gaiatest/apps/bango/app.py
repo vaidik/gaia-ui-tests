@@ -171,25 +171,25 @@ class Bango(Base):
        # time.sleep(2)
 
     def type_id_pin_number(self, pin):
-        self.marionette.find_element(*self._enter_id_pin_input_locator).click()
+        self.marionette.find_element(*self._enter_id_pin_input_locator).tap()
         self.keyboard.send(pin)
         # Switch back to Bango frame
         self.switch_to_bango_frame()
 
     def tap_confirm_id_pin_continue(self):
-        self.marionette.find_element(*self._confirm_id_pin_continue_button_locator).click()
+        self.marionette.find_element(*self._confirm_id_pin_continue_button_locator).tap()
 
     @property
     def current_country(self):
         return self.marionette.find_element(*self._country_region_flag_locator).get_attribute('alt')
 
     def tap_change_country(self):
-        self.marionette.tap(self.marionette.find_element(*self._change_country_link_locator))
+        self.marionette.find_element(*self._change_country_link_locator).tap()
         self.wait_for_element_displayed(*self._country_select_list_locator)
 
     def select_country(self, value):
         country_select = self.marionette.find_element('link text', value)
-        country_select.click()
+        country_select.tap()
         self.wait_for_element_not_displayed(*self._country_select_list_locator)
 
     def type_mobile_number(self, value):
@@ -197,7 +197,7 @@ class Bango(Base):
         mobile_number_input.send_keys(value)
         mobile_number_input.send_keys(Keys.RETURN)
         time.sleep(1)
-        self.marionette.find_element(*self._number_section_label_locator).click()
+        self.marionette.find_element(*self._number_section_label_locator).tap()
         time.sleep(1)
 
     def select_mobile_network(self, network):
@@ -205,38 +205,38 @@ class Bango(Base):
         select_locator = (self._select_locator[0], self._select_locator[1] % network)
 
         mobile_network = self.marionette.find_element(*self._mobile_network_select_locator)
-        mobile_network.click()
+        mobile_network.tap()
         self.marionette.switch_to_frame()
 
         self.wait_for_element_present(*select_locator)
 
         element = self.marionette.find_element(*select_locator)
-        element.click()
+        element.tap()
 
         close_button = self.marionette.find_element(*self._close_button_locator)
-        self.marionette.tap(close_button)
+        close_button.tap()
 
         self.switch_to_bango_frame()
 
     def tap_mobile_section_continue_button(self):
-        self.marionette.find_element(*self._mobile_section_continue_button_locator).click()
+        self.marionette.find_element(*self._mobile_section_continue_button_locator).tap()
 
     def type_sms_pin(self, sms_pin_number):
         pin_input = self.marionette.find_element(*self._sms_pin_input_locator)
-        pin_input.click()
+        pin_input.tap()
         pin_input.send_keys(sms_pin_number)
         pin_input.send_keys(Keys.RETURN)
 
         time.sleep(1)
-        self.marionette.find_element(*self._sms_pin_section_label_locator).click()
+        self.marionette.find_element(*self._sms_pin_section_label_locator).tap()
         time.sleep(1)
 
     def tap_confirm_sms_pin_button(self):
-        self.marionette.find_element(*self._confirm_sms_pin_button_locator).click()
+        self.marionette.find_element(*self._confirm_sms_pin_button_locator).tap()
         # It just seems to need this to be safe
         time.sleep(1)
 
     def tap_buy_button(self):
-        self.marionette.find_element(*self._buy_button_locator).click()
+        self.marionette.find_element(*self._buy_button_locator).tap()
         self.marionette.switch_to_frame()
         self.wait_for_element_not_present(*self._payment_frame_locator)
