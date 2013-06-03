@@ -40,6 +40,7 @@ class Bango(Base):
     _confirm_sms_pin_button_locator = ('id', 'contentHolder_uxContent_uxLnkConfirm')
 
     # Final buy app panel
+    _buy_app_loading_locator = ('id', 'uxProcessingText')
     _buy_button_locator = ('id', 'uxBtnBuyNow')
 
     # System locators SMS toaster
@@ -144,31 +145,22 @@ class Bango(Base):
         self.wait_for_buy_app_section_displayed()
         self.tap_buy_button()
 
-
     def wait_for_enter_id_pin_section_displayed(self):
         self.wait_for_element_displayed(*self._enter_id_pin_section_locator)
-        # Because difficult
-        #time.sleep(2)
 
     def wait_for_confirm_id_pin_section_displayed(self):
         self.wait_for_element_displayed(*self._confirm_id_pin_section_locator)
-        # Because difficult
-       # time.sleep(2)
 
     def wait_for_confirm_number_section_displayed(self):
         self.wait_for_element_displayed(*self._number_section_locator)
-        # Because difficult
-        #time.sleep(2)
+        time.sleep(5)
 
     def wait_for_sms_pin_section_displayed(self):
         self.wait_for_element_displayed(*self._sms_pin_section_locator)
-        # Because difficult
-        #time.sleep(2)
 
     def wait_for_buy_app_section_displayed(self):
+        self.wait_for_element_not_displayed(*self._buy_app_loading_locator)
         self.wait_for_element_displayed(*self._buy_button_locator)
-        # Because difficult
-       # time.sleep(2)
 
     def type_id_pin_number(self, pin):
         self.marionette.find_element(*self._enter_id_pin_input_locator).tap()
@@ -206,16 +198,18 @@ class Bango(Base):
 
         mobile_network = self.marionette.find_element(*self._mobile_network_select_locator)
         mobile_network.tap()
+        time.sleep(1)
         self.marionette.switch_to_frame()
 
         self.wait_for_element_present(*select_locator)
 
+        # Tap the element of the locator we compiled above
         element = self.marionette.find_element(*select_locator)
         element.tap()
 
         close_button = self.marionette.find_element(*self._close_button_locator)
         close_button.tap()
-
+        time.sleep(1)
         self.switch_to_bango_frame()
 
     def tap_mobile_section_continue_button(self):

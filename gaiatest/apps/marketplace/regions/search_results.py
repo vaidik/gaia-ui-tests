@@ -18,7 +18,7 @@ class SearchResults(Base):
         self.wait_for_element_not_present(*self._search_results_loading_locator)
 
     def tap_filter(self):
-        self.marionette.tap(self.marionette.find_element(*self._filter_button_locator))
+        self.marionette.find_element(*self._filter_button_locator).tap()
         return FilterResults(self.marionette)
 
     @property
@@ -46,13 +46,13 @@ class SearchResults(Base):
             return self.root_element.find_element(*self._install_button_locator).text
 
         def tap_install_button(self):
-            self.marionette.tap(self.root_element.find_element(*self._install_button_locator))
 
+            self.root_element.find_element(*self._install_button_locator).tap()
             # Switch back to system app and expect the 'Install' dialog
             self.marionette.switch_to_frame()
 
         def tap_purchase_button(self):
-            self.marionette.tap(self.root_element.find_element(*self._install_button_locator))
+            self.root_element.find_element(*self._install_button_locator).tap()
 
             # Return Bango payment object
             from gaiatest.apps.bango.app import Bango
@@ -75,10 +75,9 @@ class FilterResults(Base):
         self.wait_for_element_displayed(*self._apply_locator)
 
     def by_price(self, filter_name):
-        self.marionette.tap(
-            self.marionette.find_element(
-                *getattr(self, '_%s_price_filter_locator' % filter_name)))
+        self.marionette.find_element(
+                *getattr(self, '_%s_price_filter_locator' % filter_name)).tap()
 
     def tap_apply(self):
-        self.marionette.tap(self.marionette.find_element(*self._apply_locator))
+        self.marionette.find_element(*self._apply_locator).tap()
         return SearchResults(self.marionette)
