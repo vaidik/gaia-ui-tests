@@ -206,10 +206,16 @@ class Bango(Base):
         # Tap the element of the locator we compiled above
         element = self.marionette.find_element(*select_locator)
         element.tap()
+        time.sleep(1)
+        # Wait for the option to become checked
+        self.wait_for_condition(lambda m: m.find_element(*select_locator).get_attribute('aria-checked') == 'true')
 
         close_button = self.marionette.find_element(*self._close_button_locator)
         close_button.tap()
         time.sleep(1)
+        # Wait for select box to close.
+        self.wait_for_element_not_displayed(*self._close_button_locator)
+
         self.switch_to_bango_frame()
 
     def tap_mobile_section_continue_button(self):
