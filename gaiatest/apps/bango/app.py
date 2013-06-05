@@ -147,20 +147,24 @@ class Bango(Base):
 
     def wait_for_enter_id_pin_section_displayed(self):
         self.wait_for_element_displayed(*self._enter_id_pin_section_locator)
+        time.sleep(2)
 
     def wait_for_confirm_id_pin_section_displayed(self):
         self.wait_for_element_displayed(*self._confirm_id_pin_section_locator)
+        time.sleep(2)
 
     def wait_for_confirm_number_section_displayed(self):
         self.wait_for_element_displayed(*self._number_section_locator)
-        time.sleep(5)
+        time.sleep(2)
 
     def wait_for_sms_pin_section_displayed(self):
         self.wait_for_element_displayed(*self._sms_pin_section_locator)
+        time.sleep(2)
 
     def wait_for_buy_app_section_displayed(self):
         self.wait_for_element_not_displayed(*self._buy_app_loading_locator)
         self.wait_for_element_displayed(*self._buy_button_locator)
+        time.sleep(2)
 
     def type_id_pin_number(self, pin):
         self.marionette.find_element(*self._enter_id_pin_input_locator).tap()
