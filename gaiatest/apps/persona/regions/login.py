@@ -27,10 +27,13 @@ class Login(Base):
     _form_section_locator = ('css selector', 'div.vertical div.form_section')
 
     def switch_to_persona_frame(self):
+        self.marionette.switch_to_frame()
+
         self.wait_for_element_present(*self._persona_frame_locator)
         self.frame = self.marionette.find_element(*self._persona_frame_locator)
         self.marionette.switch_to_frame(self.frame)
 
+        # Wait for body.loading to clear signifying page is ready
         self.wait_for_element_not_present(*self._body_loading_locator)
 
     def type_email(self, value):

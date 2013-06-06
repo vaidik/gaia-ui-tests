@@ -13,7 +13,7 @@ class Marketplace(Base):
 
     _marketplace_iframe_locator = ('css selector', 'iframe[src*="marketplace"]')
 
-    _loading_fragment_locator = ('css selector', 'div.loading-fragment')
+    _loading_fragment_locator = ('css selector', 'div#splash-overlay')
     _error_title_locator = ('css selector', 'div.modal-dialog-message-container > h3.title')
     _error_message_locator = ('css selector', 'div.modal-dialog-message-container .message')
     _settings_button_locator = ('css selector', 'a.header-button.settings')
@@ -44,6 +44,7 @@ class Marketplace(Base):
         return self.marionette.find_element(*self._error_message_locator).text
 
     def search(self, term):
+        self.wait_for_element_displayed(*self._search_locator)
         search_box = self.marionette.find_element(*self._search_locator)
 
         # search for the app
