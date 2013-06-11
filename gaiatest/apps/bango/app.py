@@ -21,6 +21,7 @@ class Bango(Base):
     _enter_id_pin_input_locator = ('css selector', 'div.pinbox span')
     _enter_id_pin_section_locator = ('css selector', 'form[action="/mozpay/pin/create"]')
     _confirm_id_pin_section_locator = ('css selector', 'form[action="/mozpay/pin/confirm"]')
+    _verify_id_pin_section_locator = ('css selector', 'form[action="/mozpay/pin/verify"]')
     _confirm_id_pin_continue_button_locator = ('css selector', '#pin > footer > button')
 
     # Enter mobile network/number/country locators
@@ -148,6 +149,10 @@ class Bango(Base):
 
     def wait_for_confirm_id_pin_section_displayed(self):
         self.wait_for_element_displayed(*self._confirm_id_pin_section_locator)
+        time.sleep(2)
+
+    def wait_for_verify_id_pin_section_displayed(self):
+        self.wait_for_element_displayed(*self._verify_id_pin_section_locator)
         time.sleep(2)
 
     def wait_for_confirm_number_section_displayed(self):
