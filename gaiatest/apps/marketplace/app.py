@@ -44,6 +44,7 @@ class Marketplace(Base):
         return self.marionette.find_element(*self._error_message_locator).text
 
     def search(self, term):
+        self.wait_for_element_displayed(*self._search_locator)
         search_box = self.marionette.find_element(*self._search_locator)
 
         # search for the app
