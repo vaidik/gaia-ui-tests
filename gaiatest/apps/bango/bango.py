@@ -145,12 +145,14 @@ class Bango(Base):
 
     def type_id_pin_number(self, pin):
         self.marionette.find_element(*self._enter_id_pin_input_locator).tap()
+        time.sleep(1)
         self.keyboard.send(pin)
         # Switch back to Bango frame
         self.switch_to_bango_frame()
 
     def tap_confirm_id_pin_continue(self):
         self.marionette.find_element(*self._confirm_id_pin_continue_button_locator).tap()
+        time.sleep(1)
 
     @property
     def current_country(self):
@@ -159,11 +161,13 @@ class Bango(Base):
     def tap_change_country(self):
         self.marionette.find_element(*self._change_country_link_locator).tap()
         self.wait_for_element_displayed(*self._country_select_list_locator)
+        time.sleep(1)
 
     def select_country(self, value):
         country_select = self.marionette.find_element('link text', value)
         country_select.tap()
         self.wait_for_element_not_displayed(*self._country_select_list_locator)
+        time.sleep(1)
 
     def type_mobile_number(self, value):
         mobile_number_input = self.marionette.find_element(*self._mobile_number_locator)
@@ -196,15 +200,17 @@ class Bango(Base):
         time.sleep(1)
         # Wait for select box to close.
         self.wait_for_element_not_displayed(*self._close_button_locator)
-
+        time.sleep(1)
         self.switch_to_bango_frame()
 
     def tap_mobile_section_continue_button(self):
         self.marionette.find_element(*self._mobile_section_continue_button_locator).tap()
+        time.sleep(1)
 
     def type_sms_pin(self, sms_pin_number):
         pin_input = self.marionette.find_element(*self._sms_pin_input_locator)
         pin_input.tap()
+        time.sleep(1)
         pin_input.send_keys(sms_pin_number)
         pin_input.send_keys(Keys.RETURN)
 
@@ -221,3 +227,4 @@ class Bango(Base):
         self.marionette.find_element(*self._buy_button_locator).tap()
         self.marionette.switch_to_frame()
         self.wait_for_element_not_present(*self._payment_frame_locator)
+        time.sleep(1)
