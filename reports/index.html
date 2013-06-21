@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="jquery.min.js"></script>
+    <script type="text/javascript">
+    function get_params() {
+        var combined = window.location.search.replace( "?", "" ).split('&');
+        var params = {};
+        for (var i=0; i<combined.length; i++) {
+            var param = combined[i].split('=');
+            params[param[0]] = param[1];
+        }
+
+        return params;
+    }
+
+    $(document).ready(function() {
+
+        $.get(get_params().name, function(data) {
+            data = JSON.parse(data);
+
+            $('#name').text(data.name);
+            $('#total').text(data.total);
+            $('#passed').text(data.passed);
+            $('#failed').text(data.failed);
+
+            var errors = [];
+            for (error in data.errors) {
+                errors.push(data.errors[error]);
+            }
+            errors.sort(function(x, y) {
+                if (x.count < y.count) {
+                    return 1;
+                }
+                if (x.count > y.count) {
+                    return -1;
+                }
+                return 0;
+            });
+
+            for (var error=0; error<errors.length; error++) {
+                var test = errors[error];
+
+                var test_result = $($('#template').html());
+                $('#stack', test_result).html(test['stack trace'].replace(/\n/g, '<br />'));
+                $('.counts', test_result).html('Count: ' + test['count']);
+
+                var builds = $('#builds', test_result);
+                builds.text('Builds: ');
+                for (build in test['builds']) {
+                    builds.append(test['builds'][build] + ', ');
+                }
+
+                if (test['stack trace'] != 'Stupid Error') {
+                    var results = $('body #results');
+                    results.append(test_result);
+                }
+            }
+        });
+    });
+    </script>
+
+    <style type="text/css">
+    table {
+        width: 100%;
+        margin: 12px;
+    }
+    table td {
+        padding: 4px;   
+        border: 1px solid black;
+    }
+
+    #results {
+        max-width: 70%;
+    }
+
+    #results table {
+        border: 2px solid #ccc;
+    }
+
+    .counts {
+        width: 200px;
+    }
+    </style>
+</head>
+<body>
+    <table id="summary">
+        <tr>
+            <td style="width: 20%">Name</td>
+            <td id="name"></td>
+        </tr>
+        <tr>
+            <td>Total</td>
+            <td id="total"></td>
+        </tr>
+        <tr>
+            <td>Passed</td>
+            <td id="passed"></td>
+        </tr>
+        <tr>
+            <td>Failed</td>
+            <td id="failed"></td>
+        </tr>
+    </table>
+
+    <h3>Reasons of Failure</h3>
+    <div id="results">
+
+    </div>
+
+    <div style="display: none;" id="template">
+        <table class="testResults" data-max="">
+            <tr>
+                <td colspan="2">
+                    <pre id="stack"></pre>
+                </td>
+            </tr>
+            <tr>
+                <td class="counts"></td>
+                <td id="builds"></td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
