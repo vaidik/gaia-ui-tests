@@ -15,9 +15,9 @@ class TestEverythingMe(GaiaTestCase):
     _homescreen_frame_locator = ('css selector', 'div.homescreen > iframe')
     _homescreen_landing_locator = ('id', 'landing-page')
 
-    # Twitter app locator
-    _twitter_iframe_locator = ('css selector', "iframe[data-url*='twitter.com']")
-    _twitter_app_locator = ('xpath', "//li[@data-name='Twitter']")
+    # Facebook app locator
+    _facebook_iframe_locator = ('css selector', "iframe[data-url*='touch.facebook.com']")
+    _facebook_app_locator = ('xpath', "//li[@data-name='Facebook']")
 
     def setUp(self):
         GaiaTestCase.setUp(self)
@@ -53,16 +53,16 @@ class TestEverythingMe(GaiaTestCase):
         # Due to everythingme HTML we cannot locate by the text...
         app_icons = self.marionette.find_elements(*self._app_icon_locator)
         # ... so we'll just get the first one.
-        app_icons[1].tap()
+        app_icons[0].tap()
 
-        # Switch to top level frame then look for the Twitter app
+        # Switch to top level frame then look for the Facebook app
         self.marionette.switch_to_frame()
 
         # Find the frame and switch to it
-        app_iframe = self.wait_for_element_present(*self._twitter_iframe_locator)
+        app_iframe = self.wait_for_element_present(*self._facebook_iframe_locator)
         self.marionette.switch_to_frame(app_iframe)
 
-        self.assertIn("Twitter", self.marionette.title)
+        self.assertIn("Facebook", self.marionette.title)
 
     def tearDown(self):
         # This will take us back to Everything.Me 'Social' category, from whence cleanUp can return to the home page
