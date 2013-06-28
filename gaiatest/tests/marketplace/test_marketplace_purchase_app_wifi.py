@@ -51,6 +51,12 @@ class TestMarketplacePurchaseAppWifi(GaiaTestCase):
         # Well I dunno, it just needs this
         time.sleep(3)
 
+        settings.select_region("Spain")
+
+        time.sleep(3)
+
+        settings.tap_save_changes()
+
         # search for a paid app and tap on the price
         search = marketplace.search(self._APP_NAME)
         bango = search.search_results[0].tap_purchase_button()
