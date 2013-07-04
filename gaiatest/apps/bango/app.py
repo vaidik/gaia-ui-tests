@@ -104,7 +104,7 @@ class Bango(Base):
         # TODO Re-enable this when Bug 861874
         # self.wait_for_element_displayed(*self._notification_toaster_locator)
         self.wait_for_condition(lambda m: notification_toaster.location['y'] == 0,
-                                timeout=180, message="SMS was not received before 180 second timeout")
+                                timeout=300, message="SMS was not received before 300 second timeout")
 
         m = re.search("PIN: ([0-9]+).", notification_toaster.text)
         pin_number = m.group(1)
