@@ -8,7 +8,7 @@ from gaiatest.apps.marketplace.app import Marketplace
 from gaiatest.mocks.persona_test_user import PersonaTestUser
 
 
-class TestMarketplacePurchaseAppWifi(GaiaTestCase):
+class TestMarketplacePurchaseAppWifiOnDev(GaiaTestCase):
 
     _APP_NAME = 'Private Yacht'
     _app_icon_locator = ('xpath', "//li[@class='icon']//span[text()='%s']" % _APP_NAME)
@@ -29,7 +29,7 @@ class TestMarketplacePurchaseAppWifi(GaiaTestCase):
             "browserid": "firefoxos.persona.org",
             "verifier": "marketplace-dev.allizom.org"})
 
-    def test_marketplace_purchase_app_wifi(self):
+    def test_marketplace_purchase_app_wifi_on_dev(self):
 
         marketplace = Marketplace(self.marionette, 'Marketplace Dev')
         marketplace.launch()
@@ -62,10 +62,11 @@ class TestMarketplacePurchaseAppWifi(GaiaTestCase):
         bango = search.search_results[0].tap_purchase_button()
 
         # pay app
-        bango.make_payment_wifi(pin='1234',
-                                mobile_phone_number=self.testvars['carrier']['phone_number'],
-                                country=self.testvars['carrier']['country'],
-                                network=self.testvars['carrier']['network'],)
+        bango.create_pin('1234')
+
+        # make fake payment
+        bango.tap_fake_payment_button()
+        self.marionette.switch_to_frame()
 
         # At gaia System level, complete the installation prompt
         self._confirm_installation()

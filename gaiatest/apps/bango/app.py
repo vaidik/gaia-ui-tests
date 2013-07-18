@@ -39,6 +39,9 @@ class Bango(Base):
     _sms_pin_input_locator = ('id', 'pin')
     _confirm_sms_pin_button_locator = ('id', 'contentHolder_uxContent_uxLnkConfirm')
 
+    # Fake payment
+    _fake_payment_button_locator = ('css selector', 'section.pay p.centered')
+
     # Final buy app panel
     _buy_app_loading_locator = ('id', 'uxProcessingText')
     _buy_button_locator = ('id', 'uxBtnBuyNow')
@@ -64,9 +67,9 @@ class Bango(Base):
         payment_iframe = self.marionette.find_element(*self._payment_frame_locator)
         self.marionette.switch_to_frame(payment_iframe)
 
-    def make_payment_wifi(self, pin, mobile_phone_number, country, network):
+    def create_pin(self, pin):
         """
-        A helper method to complete all of the payment steps using Wifi or LAN
+        A helper method to complete the PIN creation flow for Bango
         """
 
         # create pin workflow
@@ -81,47 +84,14 @@ class Bango(Base):
         self.type_id_pin_number(pin)
         self.tap_confirm_id_pin_continue()
 
-        # wait for the phone number and network form
-        self.wait_for_confirm_number_section_displayed()
+    def make_payment_wifi(self, pin, mobile_phone_number, country, network):
+        """
+        A helper method to complete all of the payment steps using Wifi or LAN
+        """
 
-        # If Bango does not successfully auto-detect the country
-        if self.current_country != country:
-            # Select the country first otherwise it clears the other fields
-            self.tap_change_country()
-            self.select_country(country)
-
-        # Enter the phone number
-        self.type_mobile_number(mobile_phone_number)
-
-        # Choose the mobile network
-        self.select_mobile_network(network)
-        self.tap_mobile_section_continue_button()
-
-        # Switch to System frame and wait for the SMS to arrive.
+        # tap the fake payment button
+        self.tap_fake_payment_button()
         self.marionette.switch_to_frame()
-        notification_toaster = self.marionette.find_element(*self._notification_toaster_locator)
-
-        # TODO Re-enable this when Bug 861874
-        # self.wait_for_element_displayed(*self._notification_toaster_locator)
-        self.wait_for_condition(lambda m: notification_toaster.location['y'] == 0,
-                                timeout=300, message="SMS was not received before 300 second timeout")
-
-        m = re.search("PIN: ([0-9]+).", notification_toaster.text)
-        pin_number = m.group(1)
-
-        self.switch_to_bango_frame()
-
-        self.wait_for_sms_pin_section_displayed()
-
-        # Enter the pin received in SMS
-        self.type_sms_pin(pin_number)
-        self.tap_confirm_sms_pin_button()
-
-        self.marionette.switch_to_frame()
-        self.switch_to_bango_frame()
-
-        self.wait_for_buy_app_section_displayed()
-        self.tap_buy_button()
 
     def wait_for_enter_id_pin_section_displayed(self):
         self.wait_for_element_displayed(*self._enter_id_pin_section_locator)
@@ -153,6 +123,11 @@ class Bango(Base):
 
     def tap_confirm_id_pin_continue(self):
         self.marionette.find_element(*self._confirm_id_pin_continue_button_locator).tap()
+        time.sleep(1)
+
+    def tap_fake_payment_button(self):
+        time.sleep(1)
+        self.marionette.find_element(*self._fake_payment_button_locator).tap()
         time.sleep(1)
 
     @property
