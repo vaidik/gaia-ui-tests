@@ -64,9 +64,9 @@ class Bango(Base):
         payment_iframe = self.marionette.find_element(*self._payment_frame_locator)
         self.marionette.switch_to_frame(payment_iframe)
 
-    def make_payment_wifi(self, pin, mobile_phone_number, country, network):
+    def create_pin(self, pin):
         """
-        A helper method to complete all of the payment steps using Wifi or LAN
+        A helper method to carry out the Bango PIN creation flow
         """
 
         # create pin workflow
@@ -80,6 +80,11 @@ class Bango(Base):
         # enter the pin code for the second time
         self.type_id_pin_number(pin)
         self.tap_confirm_id_pin_continue()
+
+    def verify_phone_number(self, mobile_phone_number, country, network):
+        """
+        A helper method for phone number verification for Bango.
+        """
 
         # wait for the phone number and network form
         self.wait_for_confirm_number_section_displayed()
@@ -119,9 +124,6 @@ class Bango(Base):
 
         self.marionette.switch_to_frame()
         self.switch_to_bango_frame()
-
-        self.wait_for_buy_app_section_displayed()
-        self.tap_buy_button()
 
     def wait_for_enter_id_pin_section_displayed(self):
         self.wait_for_element_displayed(*self._enter_id_pin_section_locator)
