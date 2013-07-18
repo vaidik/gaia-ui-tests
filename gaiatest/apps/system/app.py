@@ -15,6 +15,9 @@ class System(Base):
     _notification_toaster_locator = (By.ID, 'notification-toaster')
     _update_manager_toaster_locator = (By.ID, 'update-manager-toaster')
 
+    # app installation
+    _app_installation_yes_button_locator = ('id', 'app-install-install-button')
+
     def wait_for_status_bar_displayed(self):
         self.wait_for_element_displayed(*self._status_bar_locator)
 
@@ -45,3 +48,8 @@ class System(Base):
     def wait_for_app_update_to_clear(self):
         update_manager_toaster = self.marionette.find_element(*self._update_manager_toaster_locator)
         self.wait_for_condition(lambda m: update_manager_toaster.location['y'] == (0 - update_manager_toaster.size['height']))
+
+    def confirm_app_installation(self):
+        self.wait_for_element_displayed(*self._app_installation_yes_button_locator)
+        self.marionette.find_element(*self._app_installation_yes_button_locator).tap()
+        self.wait_for_element_not_displayed(*self._app_installation_yes_button_locator)
