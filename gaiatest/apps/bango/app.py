@@ -49,6 +49,15 @@ class Bango(Base):
     _select_locator = ("xpath", "//section[@id='value-selector-container']//li[label[span[text()='%s']]]")
     _close_button_locator = ('css selector', 'button.value-option-confirm')
 
+    # Credit Card
+    _card_number_locator = ('id', 'card_number')
+    _card_expiry_locator = ('id', 'card_expiry')
+    _card_cvv_locator = ('id', 'card_cvv')
+    _card_remember_checkbox_locator = ('id', 'card_remember')
+
+    # Fake payment
+    _fake_payment_button_locator = ('css selector', 'section.pay p.centered')
+
 
     def __init__(self, marionette):
         Base.__init__(self, marionette)
@@ -125,6 +134,22 @@ class Bango(Base):
         self.marionette.switch_to_frame()
         self.switch_to_bango_frame()
 
+    def pay_using_credit_card(self, card_number, expiry, cvv, save_card=False):
+        self.wait_for_element_displayed(*self._card_number_locator)
+        time.sleep(1)
+
+        self.type_card_number(card_number)
+        self.type_expiry(expiry)
+        self.type_cvv(cvv)
+        if save_card:
+            self.select_save_card_details()
+
+    def make_fake_payment(self):
+        time.sleep(1)
+        self.wait_for_element_displayed(*self._fake_payment_button_locator)
+        self.marionette.find_element(*self._fake_payment_button_locator).tap()
+        time.sleep(1)
+
     def wait_for_enter_id_pin_section_displayed(self):
         self.wait_for_element_displayed(*self._enter_id_pin_section_locator)
         time.sleep(2)
@@ -170,6 +195,29 @@ class Bango(Base):
         country_select = self.marionette.find_element('link text', value)
         country_select.tap()
         self.wait_for_element_not_displayed(*self._country_select_list_locator)
+        time.sleep(1)
+
+    def type_card_number(self, card_number):
+        card_number_input = self.marionette.find_element(*self._card_number_locator)
+        card_number_input.send_keys(card_number)
+        card_number_input.send_keys(Keys.RETURN)
+        time.sleep(1)
+
+    def type_card_expiry(self, expiry):
+        card_expiry_input = self.marionette.find_element(*self._card_expiry_locator)
+        card_expiry_input.send_keys(expiry)
+        card_expiry_input.send_keys(Keys.RETURN)
+        time.sleep(1)
+
+    def type_card_cvv(self, cvv):
+        card_cvv_input = self.marionette.find_element(*self._card_cvv_locator)
+        card_cvv_input.send_keys(cvv)
+        card_cvv_input.send_keys(Keys.RETURN)
+        time.sleep(1)
+
+    def select_save_card_details(self):
+        card_save_details_checkbox = self.marionette.find_element(*self._card_remember_checkbox_locator)
+        card_save_details_checkbox.tap()
         time.sleep(1)
 
     def type_mobile_number(self, value):

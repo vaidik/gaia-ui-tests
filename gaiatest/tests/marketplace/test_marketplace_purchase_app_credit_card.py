@@ -8,7 +8,7 @@ from gaiatest.apps.marketplace.app import Marketplace
 from gaiatest.mocks.persona_test_user import PersonaTestUser
 
 
-class TestMarketplacePurchaseAppOnDevWithMockedBango(GaiaTestCase):
+class TestMarketplacePurchaseAppCreditCard(GaiaTestCase):
 
     _APP_NAME = 'Private Yacht'
     _app_icon_locator = ('xpath', "//li[@class='icon']//span[text()='%s']" % _APP_NAME)
@@ -29,7 +29,7 @@ class TestMarketplacePurchaseAppOnDevWithMockedBango(GaiaTestCase):
             "browserid": "firefoxos.persona.org",
             "verifier": "marketplace-dev.allizom.org"})
 
-    def test_marketplace_purchase_app_on_dev_with_mocked_bango(self):
+    def test_marketplace_purchase_app_credit_card(self):
 
         marketplace = Marketplace(self.marionette, 'Marketplace Dev')
         marketplace.launch()
@@ -64,8 +64,8 @@ class TestMarketplacePurchaseAppOnDevWithMockedBango(GaiaTestCase):
         # pay app
         bango.create_pin('1234')
 
-        # make fake payment
-        bango.make_fake_payment()
+        # enter credit card details
+        bango.pay_using_credit_card('5149934112455150', '0718', '123')
         self.marionette.switch_to_frame()
 
         # At gaia System level, complete the installation prompt
