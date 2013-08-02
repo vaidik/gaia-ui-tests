@@ -25,11 +25,22 @@ class MessageThread(Base):
 
 
 class Message(PageRegion):
+
     _text_locator = (By.CSS_SELECTOR, '.bubble > p')
+    _attachments_locator = (By.CSS_SELECTOR, '.bubble .attachment-container.preview')
 
     @property
     def text(self):
         return self.root_element.find_element(*self._text_locator).text
+
+    @property
+    def has_attachments(self):
+        try:
+            self.root_element.find_element(*self._attachments_locator)
+        except:
+            return False
+
+        return True
 
     @property
     def id(self):
