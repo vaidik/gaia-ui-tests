@@ -5,58 +5,59 @@
 import time
 import re
 from marionette.keys import Keys
+from marionette.by import By
 from gaiatest.apps.base import Base
 from gaiatest.apps.keyboard.app import Keyboard
 
 
 class Bango(Base):
 
-    _payment_frame_locator = ('css selector', "div#trustedui-frame-container > iframe")
+    _payment_frame_locator = (By.CSS_SELECTOR, "div#trustedui-frame-container > iframe")
 
     # id_pin is the 4 digit security code to secure your identity
     # sms_pin is the PIN received in SMS to validate the network connection
 
     # Enter/confirm PIN
-    _enter_id_pin_locator = ('id', 'enter-pin')
-    _enter_id_pin_input_locator = ('css selector', 'div.pinbox span')
-    _enter_id_pin_section_locator = ('css selector', 'form[action="/mozpay/pin/create"]')
-    _confirm_id_pin_section_locator = ('css selector', 'form[action="/mozpay/pin/confirm"]')
-    _confirm_id_pin_continue_button_locator = ('css selector', '#pin > footer > button')
+    _enter_id_pin_locator = (By.ID, 'enter-pin')
+    _enter_id_pin_input_locator = (By.CSS_SELECTOR, 'div.pinbox span')
+    _enter_id_pin_section_locator = (By.CSS_SELECTOR, 'form[action="/mozpay/pin/create"]')
+    _confirm_id_pin_section_locator = (By.CSS_SELECTOR, 'form[action="/mozpay/pin/confirm"]')
+    _confirm_id_pin_continue_button_locator = (By.CSS_SELECTOR, '#pin > footer > button')
 
     # Enter mobile network/number/country locators
-    _number_section_locator = ('id', 'numberSection')
-    _number_section_label_locator = ('css selector', '#numberSection label')
-    _mobile_number_locator = ('id', 'msisdn')
-    _mobile_network_select_locator = ('id', 'contentHolder_uxContent_uxDdlNetworks')
-    _country_region_flag_locator = ('id', 'contentHolder_uxContent_uxRegionSelection_uxImgRegionFlag')
-    _change_country_link_locator = ('id', 'contentHolder_uxContent_uxRegionSelection_uxRegionChangeLnk')
-    _country_select_list_locator = ('id', 'contentHolder_uxContent_uxRegionSelection_uxUlCountries')
-    _mobile_section_continue_button_locator = ('id', 'contentHolder_uxContent_uxLnkContinue')
+    _number_section_locator = (By.ID, 'numberSection')
+    _number_section_label_locator = (By.CSS_SELECTOR, '#numberSection label')
+    _mobile_number_locator = (By.ID, 'msisdn')
+    _mobile_network_select_locator = (By.ID, 'contentHolder_uxContent_uxDdlNetworks')
+    _country_region_flag_locator = (By.ID, 'contentHolder_uxContent_uxRegionSelection_uxImgRegionFlag')
+    _change_country_link_locator = (By.ID, 'contentHolder_uxContent_uxRegionSelection_uxRegionChangeLnk')
+    _country_select_list_locator = (By.ID, 'contentHolder_uxContent_uxRegionSelection_uxUlCountries')
+    _mobile_section_continue_button_locator = (By.ID, 'contentHolder_uxContent_uxLnkContinue')
 
     # Pin received from SMS message
-    _sms_pin_section_locator = ('id', 'pinSection')
-    _sms_pin_section_label_locator = ('css selector', '#pinSection label')
-    _sms_pin_input_locator = ('id', 'pin')
-    _confirm_sms_pin_button_locator = ('id', 'contentHolder_uxContent_uxLnkConfirm')
+    _sms_pin_section_locator = (By.ID, 'pinSection')
+    _sms_pin_section_label_locator = (By.CSS_SELECTOR, '#pinSection label')
+    _sms_pin_input_locator = (By.ID, 'pin')
+    _confirm_sms_pin_button_locator = (By.ID, 'contentHolder_uxContent_uxLnkConfirm')
 
     # Final buy app panel
-    _buy_app_loading_locator = ('id', 'uxProcessingText')
-    _buy_button_locator = ('id', 'uxBtnBuyNow')
+    _buy_app_loading_locator = (By.ID, 'uxProcessingText')
+    _buy_button_locator = (By.ID, 'uxBtnBuyNow')
 
     # System locators SMS toaster
-    _notification_toaster_locator = ('id', 'notification-toaster')
+    _notification_toaster_locator = (By.ID, 'notification-toaster')
     # System locator Select wrapper
-    _select_locator = ("xpath", "//section[@id='value-selector-container']//li[label[span[text()='%s']]]")
-    _close_button_locator = ('css selector', 'button.value-option-confirm')
+    _select_locator = (By.XPATH, "//section[@id='value-selector-container']//li[label[span[text()='%s']]]")
+    _close_button_locator = (By.CSS_SELECTOR, 'button.value-option-confirm')
 
     # Credit Card
-    _card_number_locator = ('id', 'card_number')
-    _card_expiry_locator = ('id', 'card_expiry')
-    _card_cvv_locator = ('id', 'card_cvv')
-    _card_remember_checkbox_locator = ('id', 'card_remember')
+    _card_number_locator = (By.ID, 'card_number')
+    _card_expiry_locator = (By.ID, 'card_expiry')
+    _card_cvv_locator = (By.ID, 'card_cvv')
+    _card_remember_checkbox_locator = (By.ID, 'card_remember')
 
     # Fake payment
-    _fake_payment_button_locator = ('css selector', 'section.pay p.centered')
+    _fake_payment_button_locator = (By.CSS_SELECTOR, 'section.pay p.centered')
 
     def __init__(self, marionette):
         Base.__init__(self, marionette)

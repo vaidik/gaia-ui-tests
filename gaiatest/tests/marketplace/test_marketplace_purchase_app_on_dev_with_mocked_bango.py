@@ -7,14 +7,15 @@ from gaiatest import GaiaTestCase
 from gaiatest.apps.marketplace.app import Marketplace
 from gaiatest.apps.system.app import System
 from gaiatest.mocks.persona_test_user import PersonaTestUser
+from marionette.by import By
 
 
 class TestMarketplacePurchaseAppOnDevWithMockedBango(GaiaTestCase):
 
     _APP_NAME = 'Private Yacht'
-    _app_icon_locator = ('xpath', "//li[@class='icon']//span[text()='%s']" % _APP_NAME)
+    _app_icon_locator = (By.XPATH, "//li[@class='icon']//span[text()='%s']" % _APP_NAME)
 
-    _homescreen_iframe_locator = ('css selector', 'div.homescreen iframe')
+    _homescreen_iframe_locator = (By.CSS_SELECTOR, 'div.homescreen iframe')
 
     def setUp(self):
         GaiaTestCase.setUp(self)

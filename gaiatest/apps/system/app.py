@@ -16,7 +16,7 @@ class System(Base):
     _update_manager_toaster_locator = (By.ID, 'update-manager-toaster')
 
     # app installation
-    _app_installation_yes_button_locator = ('id', 'app-install-install-button')
+    _app_installation_yes_button_locator = (By.ID, 'app-install-install-button')
 
     def wait_for_status_bar_displayed(self):
         self.wait_for_element_displayed(*self._status_bar_locator)
