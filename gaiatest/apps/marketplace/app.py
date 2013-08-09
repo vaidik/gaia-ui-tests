@@ -73,8 +73,11 @@ class Marketplace(Base):
         search_box = self.marionette.find_element(*self._search_locator)
 
         # search for the app
-        search_box.send_keys(term)
-        search_box.send_keys(Keys.RETURN)
+        search_box.send_keys(term + Keys.RETURN)
+
+        # TODO: Investigate why the next line raises StaleElementException
+        # search_box.send_keys(Keys.RETURN)
+
         from gaiatest.apps.marketplace.regions.search_results import SearchResults
         return SearchResults(self.marionette)
 
