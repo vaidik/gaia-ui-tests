@@ -28,6 +28,7 @@ class Message(PageRegion):
 
     _text_locator = (By.CSS_SELECTOR, '.bubble > p')
     _attachments_locator = (By.CSS_SELECTOR, '.bubble .attachment-container.preview')
+    _checkbox_input_locator = (By.CSS_SELECTOR, 'label.pack-checkbox.danger')
 
     @property
     def text(self):
@@ -45,3 +46,6 @@ class Message(PageRegion):
     @property
     def id(self):
         return self.root_element.get_attribute('id')
+
+    def select_message(self):
+        self.root_element.find_element(*self._checkbox_input_locator).tap()
