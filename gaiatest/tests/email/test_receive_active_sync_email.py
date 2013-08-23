@@ -10,36 +10,38 @@ from gaiatest.mocks.mock_email import MockEmail
 from gaiatest.utils.email.email_util import EmailUtil
 
 
-class TestReceiveActiveSyncEmail(GaiaTestCase):
+class BaseTestReceiveActiveSyncEmail(GaiaTestCase):
 
-    def setUp(self):
+    def setUp(self, credentials):
+        self.credentials = credentials
+
         try:
-            self.testvars['email']['ActiveSync']
             self.testvars['email']['IMAP']
         except KeyError:
-            raise SkipTest('account details not present in test variables')
+            raise SkipTest('IMAP account details not present in '
+                           'test variables.')
 
         GaiaTestCase.setUp(self)
         self.connect_to_network()
 
-    def test_receive_active_sync_email(self):
+    def _test_receive_active_sync_email(self, wait_timeout=60):
         # setup ActiveSync account
         email = Email(self.marionette)
         email.launch()
 
-        email.setup_active_sync_email(
-            self.testvars['email']['ActiveSync'])
+        email.setup_active_sync_email(self.credentials)
 
         # wait for sync to complete
         email.wait_for_emails_to_sync()
 
         # send email to active sync account
-        mock_email = MockEmail(senders_email=self.testvars['email']['IMAP']['email'],
-                               recipients_email=self.testvars['email']['ActiveSync']['email'])
+        mock_email = MockEmail(
+            senders_email=self.testvars['email']['IMAP']['email'],
+            recipients_email=self.credentials['email'])
         EmailUtil().send(self.testvars['email']['IMAP'], mock_email)
 
         # wait for the email to arrive
-        email.wait_for_email(mock_email.subject)
+        email.wait_for_email(mock_email.subject, timeout=wait_timeout)
 
         # check if the sender's email address is fine
         self.assertEqual(email.mails[0].senders_email,

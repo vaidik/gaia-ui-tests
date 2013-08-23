@@ -8,25 +8,20 @@ from gaiatest import GaiaTestCase
 from gaiatest.apps.email.app import Email
 
 
-class TestSetupActiveSync(GaiaTestCase):
+class BaseTestSetupActiveSync(GaiaTestCase):
 
-    def setUp(self):
-        try:
-            self.testvars['email']['ActiveSync']
-        except KeyError:
-            raise SkipTest('account details not present in test variables')
-
+    def setUp(self, credential):
+        self.credentials = credential
         GaiaTestCase.setUp(self)
         self.connect_to_network()
 
-    def test_setup_active_sync_email(self):
+    def _test_setup_active_sync_email(self):
         # setup ActiveSync account
 
         self.email = Email(self.marionette)
         self.email.launch()
 
-        self.email.setup_active_sync_email(
-            self.testvars['email']['ActiveSync'])
+        self.email.setup_active_sync_email(self.credentials)
 
         # check header area
         self.assertTrue(self.email.header.is_compose_visible)

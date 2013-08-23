@@ -10,13 +10,10 @@ from gaiatest import GaiaTestCase
 from gaiatest.apps.email.app import Email
 
 
-class TestSendActiveSyncEmail(GaiaTestCase):
+class BaseTestSendActiveSyncEmail(GaiaTestCase):
 
-    def setUp(self):
-        try:
-            account = self.testvars['email']['ActiveSync']
-        except KeyError:
-            raise SkipTest('account details not present in test variables')
+    def setUp(self, credentials):
+        self.credentials = credentials
 
         GaiaTestCase.setUp(self)
         self.connect_to_network()
@@ -25,20 +22,21 @@ class TestSendActiveSyncEmail(GaiaTestCase):
         self.email.launch()
 
         # setup ActiveSync account
-        self.email.setup_active_sync_email(account)
+        self.email.setup_active_sync_email(self.credentials)
 
-    def test_send_active_sync_email(self):
+    def _test_send_active_sync_email(self, wait_timeout=60):
         curr_time = repr(time.time()).replace('.', '')
         new_email = self.email.header.tap_compose()
 
-        new_email.type_to(self.testvars['email']['ActiveSync']['email'])
+        new_email.type_to(self.credentials['email'])
         new_email.type_subject('test email %s' % curr_time)
         new_email.type_body('Lorem ipsum dolor sit amet %s' % curr_time)
 
         self.email = new_email.tap_send()
 
         # wait for the email to be sent before we tap refresh
-        self.email.wait_for_email('test email %s' % curr_time)
+        self.email.wait_for_email('test email %s' % curr_time,
+                                  timeout=wait_timeout)
 
         # assert that the email app subject is in the email list
         self.assertIn('test email %s' % curr_time, [
