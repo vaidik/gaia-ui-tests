@@ -4,7 +4,6 @@
 
 from marionette import SkipTest
 
-from gaiatest.apps.email.app import Email
 from gaiatest.mocks.mock_email import MockEmail
 from gaiatest.tests.email.test_receive_active_sync_email import (
     BaseTestReceiveActiveSyncEmail)
